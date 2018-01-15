@@ -1,20 +1,12 @@
-<div class="short">
-    <h2><a href="{{.Link}}">{{.Title}}</a></h2>
-    <div class="datettr">
-        <span class="date">{{.Date}}</span> - <span class="ttr">{{.TimeToRead}} read</span> - <span class="tags">
-            {{range .Tags}}
-                <span><a href="{{.Link}}">{{.Name}}</a></span>
-            {{end}}
-        </span>
+<section class="posts">
+    <div class="posts-archive">
+        <time class="posts-archive-month" datetime="{{ .Date }}">{{.Date}}</time>
+        <ol class="posts-list">
+        {{/*{{ range .Posts }}*/}}
+            <li><a href="{{ .Link }}">{{ .Title }}</a> <span> -- {{.TimeToRead}} read</span></li>
+            <i class="fa fa-quote-left fa-1x fa-pull-left" aria-hidden="false"> </i>
+            <div> <p> {{.Short}}</p> </div>
+        {{/*{{ end }}*/}}
+        </ol>
     </div>
-    <div>
-        <a href="{{.Link}}">
-            <p>
-                {{.Short}}
-            </p>
-        </a>
-    </div>
-    <div class="readmore">
-        <a href="{{.Link}}">read more...</a>
-    </div>
-</div>
+</section>

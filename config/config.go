@@ -3,10 +3,11 @@ package config
 // Config is the configuration of the blog-generator
 type Config struct {
 	Generator struct {
-		Repo string
-		Tmp  string
-		Dest string
-		NPG  int
+		Repo     string
+		SiteRepo string
+		Tmp      string
+		Dest     string
+		NPG      int
 	}
 	Blog struct {
 		URL            string

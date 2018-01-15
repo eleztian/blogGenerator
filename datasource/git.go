@@ -10,6 +10,18 @@ import (
 // GitDataSource is the git data source object
 type GitDataSource struct{}
 
+func Push(from, to string) error {
+	fmt.Printf("Pushing data from %s into %s...\n", from, to)
+	//if err := createFolderIfNotExist(to); err != nil {
+	//	return err
+	//}
+	if err := pushRepo(from,to); err != nil {
+		return err
+	}
+	fmt.Print("Pushing complete.\n")
+	return  nil
+}
+
 // Fetch creates the output folder, clears it and clones the repository there
 func (ds *GitDataSource) Fetch(from, to string) ([]string, error) {
 	fmt.Printf("Fetching data from %s into %s...\n", from, to)
@@ -28,6 +40,41 @@ func (ds *GitDataSource) Fetch(from, to string) ([]string, error) {
 	}
 	fmt.Print("Fetching complete.\n")
 	return dirs, nil
+}
+
+func pushRepo(path, repositoryURL string) error {
+	cmdName := "git"
+	initArgs := []string{"init", "."}
+	cmd := exec.Command(cmdName, initArgs...)
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error initializing git repository at %s: %v", path, err)
+	}
+	remoteArgs := []string{"remote", "add", "origin2", repositoryURL}
+	cmd = exec.Command(cmdName, remoteArgs...)
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error setting remote %s: %v", repositoryURL, err)
+	}
+	addArgs := []string{"add", "."}
+	cmd = exec.Command(cmdName, addArgs...)
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error add .: %v", err)
+	}
+	commitArgs := []string{"commit", "-m", "upadte"}
+	cmd = exec.Command(cmdName, commitArgs...)
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error commit : %v", err)
+	}
+	pullArgs := []string{"push", "origin2", "master", "--force"}
+	cmd = exec.Command(cmdName, pullArgs...)
+	cmd.Dir = path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error pushing master at %s: %v", path, err)
+	}
+	return nil
 }
 
 func createFolderIfNotExist(path string) error {

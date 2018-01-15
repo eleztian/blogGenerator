@@ -31,8 +31,10 @@ func Run() {
 	})
 
 	err = g.Generate()
-
 	if err != nil {
+		log.Fatal(err)
+	}
+	if err = datasource.Push(cfg.Generator.Dest, cfg.Generator.SiteRepo); err != nil {
 		log.Fatal(err)
 	}
 }

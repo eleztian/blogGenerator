@@ -3,7 +3,7 @@ package generator
 import (
 	"bufio"
 	"fmt"
-	"github.com/zupzup/blog-generator/config"
+	"github.com/eleztian/blog-generator/config"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -79,7 +79,8 @@ func (g *SiteGenerator) Generate() error {
 	for _, path := range sources {
 		post, err := newPost(path, g.Config.Config.Blog.Dateformat)
 		if err != nil {
-			return err
+			fmt.Println("error read: ", path, err)
+			continue
 		}
 		posts = append(posts, post)
 	}

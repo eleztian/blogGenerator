@@ -2,11 +2,17 @@
     <div class="posts-archive">
         <time class="posts-archive-month" datetime="{{ .Date }}">{{.Date}}</time>
         <ol class="posts-list">
-        {{/*{{ range .Posts }}*/}}
-            <li><a href="{{ .Link }}">{{ .Title }}</a> <span> -- {{.TimeToRead}} read</span></li>
+            {{/*{{ range .Posts }}*/}}
+            <li>
+                <a href="{{ .Link }}">{{ .Title }}</a>
+                <span> -- {{.TimeToRead}} read</span>
+            </li>
+            {{if eq .Short ""}}
             <i class="fa fa-quote-left fa-1x fa-pull-left" aria-hidden="false"> </i>
-            <div> <p> {{.Short}}</p> </div>
-        {{/*{{ end }}*/}}
+            <div>
+                <p> {{.Short}}</p>
+            </div>
+            {{end}} {{/*{{ end }}*/}}
         </ol>
     </div>
 </section>

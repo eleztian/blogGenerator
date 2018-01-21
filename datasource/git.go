@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 // GitDataSource is the git data source object
@@ -34,7 +35,7 @@ func (ds *GitDataSource) Fetch(from, to string) ([]string, error) {
 	if err := cloneRepo(to, from); err != nil {
 		return nil, err
 	}
-	dirs, err := getContentFolders(to)
+	dirs, err := getContentFolders(to, ".md")
 	if err != nil {
 		return nil, err
 	}
@@ -132,21 +133,19 @@ func cloneRepo(path, repositoryURL string) error {
 	return nil
 }
 
-func getContentFolders(path string) ([]string, error) {
+func getContentFolders(path string, fileType string) ([]string, error) {
 	var result []string
-	dir, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("error accessing directory %s: %v", path, err)
-	}
-	defer dir.Close()
-	files, err := dir.Readdir(-1)
-	if err != nil {
-		return nil, fmt.Errorf("error reading contents of directory %s: %v", path, err)
-	}
-	for _, file := range files {
-		if file.IsDir() && file.Name()[0] != '.' {
-			result = append(result, filepath.Join(path, file.Name()))
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
 		}
+		if !info.IsDir() && strings.HasSuffix(info.Name(), fileType) {
+			result = append(result, path)
+		}
+		return err
+	})
+	if err != nil {
+		return nil, fmt.Errorf("file not exit %s: %v", path, err)
 	}
 	return result, nil
 }

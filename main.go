@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zupzup/blog-generator/cli"
+	"github.com/eleztian/blog-generator/cli"
 	"net/http"
 )
 
